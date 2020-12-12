@@ -5,14 +5,20 @@ import ChatShell from "./containers/shell/ChatShell";
 import VideoShell from "./containers/shell/VideoShell";
 
 class App extends React.Component {
-  render() {
-    return (
-        <SplitterLayout primaryMinSize={30} secondaryMinSize={60} percentage={true}>
-          <ChatShell/>
-          <VideoShell/>
-        </SplitterLayout>
-    );
-  }
+    constructor(props) {
+
+        super(props);
+
+    }
+
+    render() {
+        return (
+            <SplitterLayout primaryMinSize={30} secondaryMinSize={60} percentage={true}>
+                <ChatShell roomId={"test room"}/>
+                <VideoShell />
+            </SplitterLayout>
+        );
+    }
 }
 
 export default App;
