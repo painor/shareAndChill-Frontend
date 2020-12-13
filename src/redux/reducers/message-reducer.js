@@ -20,7 +20,7 @@ class NetworkClass {
     }
 
     connect() {
-        this.client = new W3CWebSocket('ws://51.103.51.133:8080');
+        this.client = new W3CWebSocket('wss://painor.dev/ws/');
 
         this.client.onclose = (e) => {
             console.log(e)
