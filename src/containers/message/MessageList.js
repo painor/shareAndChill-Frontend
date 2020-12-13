@@ -6,10 +6,6 @@ import { connect } from "react-redux";
 
 
 class MessageList extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         console.log(this.props.messages)
         console.log(this.props)
@@ -25,10 +21,11 @@ class MessageList extends React.Component {
         </div>);
     }
 }
+
 function mapStateToProps(state) {
-    const { messageState } = state;
-    return { messages: messageState.messages }
+    const {messageState} = state;
+    return {messages: messageState.messages}
 }
 
 
-export default connect(mapStateToProps,null)(MessageList);
+export default connect(mapStateToProps, null)(MessageList);

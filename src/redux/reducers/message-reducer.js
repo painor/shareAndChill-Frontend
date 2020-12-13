@@ -5,6 +5,7 @@ import store from "../store";
 const initialState = {
     messages: [],
     isPlaying: false,
+    url: 'https://www.youtube.com/watch?v=6Ow2XQVlSHk',
 };
 
 class NetworkClass {
@@ -62,6 +63,15 @@ class NetworkClass {
                         });
                     }
                     break;
+                case "url":
+                    store.dispatch({
+                        type: "URL_CHANGED",
+                        data: received.data,
+                    });
+                    break;
+                default:
+                    throw new Error("UNKNOWN ACTION RECIVED"+received)
+
             }
 
         };
@@ -76,22 +86,20 @@ const messageReducer = function(state = initialState, action) {
         case "SENT_MESSAGE":
             network.send(JSON.stringify({type: "message", data: action.data}));
             return {...state, messages: [action.data, ...state.messages]};
-            break;
         case "RECEIVED_MESSAGE":
-            console.log("RECIVED")
-            console.log(action)
             return {...state, messages: [...state.messages, action.data]};
-            break;
         case "SENT_STATE":
-            console.log("SENT")
-
             network.send(JSON.stringify({type: "state", state: action.playing}));
             break;
         case "CHANGED_STATE":
-            console.log(state)
             return {...state, isPlaying: action.playing};
-            break;
-
+        case "CHANGE_URL":
+            network.send(JSON.stringify({type: "url", data: action.data}));
+            return {...state, url: action.data};
+        case "URL_CHANGED":
+            return {...state, url: action.data};
+        default:
+            return state;
     }
 
     return state;

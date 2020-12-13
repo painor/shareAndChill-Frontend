@@ -18,13 +18,22 @@ const adjustTextMessage = (textMessage) => {
 class ChatForm extends React.Component {
     constructor(props) {
         super(props);
+        this.chatType = props.chatType;
         this.state = {
             textMessage: ""
         }
     }
 
     onMessageSubmitted(text) {
-        this.props.toggleActive(text)
+        if (this.chatType === "SEND_MESSAGE") {
+            this.props.sendMessage(text)
+
+        } else if (this.chatType === "CHANGE_URL") {
+            this.props.changeUrl(text)
+
+        } else {
+            throw new Error("Unknown type");
+        }
 
     }
 
@@ -41,22 +50,28 @@ class ChatForm extends React.Component {
                 });
             }
         };
+        let attachment;
+
+        if (this.props.hasAttachment) {
+            attachment = <div title="Add Attachment"><AttachmentIcon/></div>
+        } else {
+            attachment = ""
+        }
+
 
         const formContents = (
             <>
-                <div title="Add Attachment">
-                    <AttachmentIcon/>
-                </div>
+                {attachment}
                 <input
                     type="text"
-                    placeholder="type a message"
+                    placeholder={this.props.hintText}
                     value={this.state.textMessage}
                     onChange={(e) => {
                         this.setState({
                             textMessage: e.target.value
                         });
                     }}/>
-                <FormButton disabled={disableButton}>Send</FormButton>
+                <FormButton disabled={disableButton}>{this.props.buttonText}</FormButton>
             </>
         );
 
@@ -72,9 +87,7 @@ class ChatForm extends React.Component {
 
 const mapDispatchToProps = function(dispatch, ownProps) {
     return {
-        toggleActive: function(text) {
-            console.log("TEXT",text)
-            console.log("dispatch",dispatch)
+        sendMessage: function(text) {
             const newMessage = {
                 key: uuidv4(),
                 isMyMessage: true,
@@ -92,9 +105,15 @@ const mapDispatchToProps = function(dispatch, ownProps) {
                 type: 'SENT_MESSAGE',
                 data: newMessage
             });
+        },
+        changeUrl: function(text) {
+            dispatch({
+                type: 'CHANGE_URL',
+                data: text
+            });
         }
     }
 }
 
 
-export default connect(null,mapDispatchToProps)(ChatForm);
+export default connect(null, mapDispatchToProps)(ChatForm);

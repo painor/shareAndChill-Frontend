@@ -2,7 +2,7 @@ import React from "react";
 import ReactPlayer from 'react-player'
 import store from "../../redux/store";
 import { connect } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
+import ChatForm from "../../components/chat-form/ChatForm";
 
 // Render a YouTube video player
 
@@ -29,15 +29,25 @@ class VideoShell extends React.Component {
 
     render() {
         return (
-            <div><ReactPlayer playing={this.props.isPlaying} onPause={this.props.onPause} onPlay={this.props.onPlay} loop={true}
-                              url='https://www.youtube.com/watch?v=6Ow2XQVlSHk'/></div>)
+            <div style={{
+                position: 'absolute', left: '50%', top: '50%',
+                transform: 'translate(-50%, -50%)'
+            }}
+            ><ReactPlayer controls={true} playing={this.props.isPlaying} onPause={this.props.onPause} onPlay={this.props.onPlay}
+                          loop={true}
+                          url={this.props.url}/>
+                <ChatForm hasAttachment={false} hintText={"Change URL here"} buttonText={"Change"} chatType={"CHANGE_URL"}/>
+            </div>)
     }
 }
 
 function mapStateToProps(state) {
     const {messageState} = state;
     console.log(messageState)
-    return {isPlaying: messageState.isPlaying}
+    return {
+        isPlaying: messageState.isPlaying,
+        url: messageState.url
+    }
 }
 
 const mapDispatchToProps = function(dispatch, ownProps) {
