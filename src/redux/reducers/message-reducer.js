@@ -87,7 +87,7 @@ const messageReducer = function(state = initialState, action) {
             network.send(JSON.stringify({type: "message", data: action.data}));
             return {...state, messages: [action.data, ...state.messages]};
         case "RECEIVED_MESSAGE":
-            return {...state, messages: [...state.messages, action.data]};
+            return {...state, messages: [action.data,...state.messages]};
         case "SENT_STATE":
             network.send(JSON.stringify({type: "state", state: action.playing}));
             break;
